@@ -5,16 +5,15 @@ import org.junit.Test;
 
 import com.algaworks.ecommerce.EntityManagerTest;
 import com.algaworks.ecommerce.model.Cliente;
-import com.algaworks.ecommerce.model.Produto;
+import com.algaworks.ecommerce.model.enums.SexoCliente;
 
 public class CrudCliente extends EntityManagerTest {
 	
 	@Test
     public void inserirRegistro() {
         Cliente cliente = new Cliente();
-
-        cliente.setId(3);
         cliente.setNome("José Lucas");
+        cliente.setSexo(SexoCliente.MASCULINO);
 
         entityManager.getTransaction().begin();
         entityManager.persist(cliente);
@@ -24,14 +23,6 @@ public class CrudCliente extends EntityManagerTest {
 
         Cliente clienteVerificacao = entityManager.find(Cliente.class, cliente.getId());
         Assert.assertNotNull(clienteVerificacao);
-    }
-
-    @Test
-    public void busarPorIdentificador() {
-        Produto produto = entityManager.find(Produto.class, 1);
-
-        Assert.assertNotNull(produto);
-        Assert.assertEquals("Kindle", produto.getNome());
     }
 
     @Test
