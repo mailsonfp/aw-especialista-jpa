@@ -1,13 +1,10 @@
 package com.algaworks.ecommerce.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.algaworks.ecommerce.model.enums.SexoCliente;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,15 +14,15 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Cliente {
-	
-	@EqualsAndHashCode.Include
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Estoque {
 
-    private String nome;
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     
-    @Enumerated(EnumType.STRING)
-    private SexoCliente sexo;
+    @Column(name = "produto_id")
+    private Integer produtoId;
+
+    private Integer quantidade;
 }
