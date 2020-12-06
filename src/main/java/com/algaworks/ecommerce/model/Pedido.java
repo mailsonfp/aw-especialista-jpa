@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.algaworks.ecommerce.model.enums.StatusPedido;
 
@@ -32,7 +33,7 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @ManyToOne
+    @ManyToOne(optional = false /*optional define se será realizado um inner join ou left outer join*/)
     private Cliente cliente;
     
     @Column(name = "data_pedido")
@@ -41,8 +42,8 @@ public class Pedido {
     @Column(name = "data_conclusao")
     private LocalDateTime dataConclusao;
     
-    @Column(name = "nota_fiscal_id")
-    private Integer notaFiscalId;
+    @OneToOne(mappedBy = "pedido")
+    private NotaFiscal notaFiscal;
 
     private BigDecimal total;
     
@@ -51,6 +52,9 @@ public class Pedido {
     
     @Enumerated(EnumType.STRING)
     private StatusPedido status;
+    
+    @OneToOne(mappedBy = "pedido")
+    private PagamentoCartao pagamento;
     
     @Embedded
     private EnderecoEntregaPedido enderecoEntrega;
