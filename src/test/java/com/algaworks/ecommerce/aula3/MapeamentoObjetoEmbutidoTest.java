@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Cliente;
 import com.algaworks.ecommerce.model.EnderecoEntregaPedido;
 import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.enums.StatusPedido;
@@ -22,8 +23,11 @@ public class MapeamentoObjetoEmbutidoTest extends EntityManagerTest {
         endereco.setBairro("Centro");
         endereco.setCidade("Uberlândia");
         endereco.setEstado("MG");
-
+        
+        Cliente cliente = entityManager.find(Cliente.class, 1);
+        
         Pedido pedido = new Pedido();
+        pedido.setCliente(cliente);
         pedido.setDataPedido(LocalDateTime.now());
         pedido.setStatus(StatusPedido.AGUARDANDO);
         pedido.setTotal(new BigDecimal(1000));
