@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,16 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PostPersist;
+import javax.persistence.PostRemove;
+import javax.persistence.PostUpdate;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 
+import com.algaworks.ecommerce.listener.GenericoListener;
+import com.algaworks.ecommerce.listener.GerarNotaFiscalListener;
 import com.algaworks.ecommerce.model.enums.StatusPedido;
 
 import lombok.EqualsAndHashCode;
@@ -26,6 +36,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@EntityListeners({ GerarNotaFiscalListener.class, GenericoListener.class })
 public class Pedido {
 
     @EqualsAndHashCode.Include
@@ -37,8 +48,11 @@ public class Pedido {
     private Cliente cliente;
     
     @Column(name = "data_pedido")
-    private LocalDateTime dataPedido;
+    private LocalDateTime dataCriacao;
 
+    @Column(name = "data_ultima_atualizacao")
+    private LocalDateTime dataUltimaAtualizacao;
+    
     @Column(name = "data_conclusao")
     private LocalDateTime dataConclusao;
     
@@ -58,4 +72,53 @@ public class Pedido {
     
     @Embedded
     private EnderecoEntregaPedido enderecoEntrega;
+    
+    public boolean isPago() {
+    	return StatusPedido.PAGO.equals(status);
+    }
+    //  @PrePersist o mesmo método pode ter mais de uma anotação, porém, não pode repetir anotações em mais de um método
+    //  @PreUpdate
+    public void calcularTotal() {
+        if (itens != null) {
+            total = itens.stream().map(PedidoItem::getPrecoProduto)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+    }
+
+    @PrePersist
+    public void aoPersistir() {
+        dataCriacao = LocalDateTime.now();
+        calcularTotal();
+    }
+
+    @PreUpdate
+    public void aoAtualizar() {
+        dataUltimaAtualizacao = LocalDateTime.now();
+        calcularTotal();
+    }
+
+    @PostPersist
+    public void aposPersistir() {
+        System.out.println("Após persistir Pedido.");
+    }
+
+    @PostUpdate
+    public void aposAtualizar() {
+        System.out.println("Após atualizar Pedido.");
+    }
+
+    @PreRemove
+    public void aoRemover() {
+        System.out.println("Antes de remover Pedido.");
+    }
+
+    @PostRemove
+    public void aposRemover() {
+        System.out.println("Após remover Pedido.");
+    }
+
+    @PostLoad
+    public void aoCarregar() {
+        System.out.println("Após carregar o Pedido.");
+    }
 }
