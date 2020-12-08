@@ -47,10 +47,10 @@ public class Pedido {
     @ManyToOne(optional = false /*optional define se será realizado um inner join ou left outer join*/)
     private Cliente cliente;
     
-    @Column(name = "data_pedido")
+    @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
-    @Column(name = "data_ultima_atualizacao")
+    @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
     
     @Column(name = "data_conclusao")

@@ -12,6 +12,7 @@ import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.PedidoItem;
 import com.algaworks.ecommerce.model.Produto;
 import com.algaworks.ecommerce.model.enums.StatusPedido;
+import com.algaworks.ecommerce.model.id.PedidoItemId;
 
 public class RelacionamentoManyToOneTest extends EntityManagerTest {
 	
@@ -38,6 +39,8 @@ public class RelacionamentoManyToOneTest extends EntityManagerTest {
 	
 	@Test
     public void verificarRelacionamentoItemPedido() {
+		entityManager.getTransaction().begin();
+		
         Cliente cliente = entityManager.find(Cliente.class, 1);
         Produto produto = entityManager.find(Produto.class, 1);
 
@@ -48,12 +51,12 @@ public class RelacionamentoManyToOneTest extends EntityManagerTest {
         pedido.setCliente(cliente);
 
         PedidoItem pedidoItem = new PedidoItem();
+        pedidoItem.setId(new PedidoItemId());
         pedidoItem.setPrecoProduto(produto.getPreco());
         pedidoItem.setQuantidade(1);
         pedidoItem.setPedido(pedido);
         pedidoItem.setProduto(produto);
-
-        entityManager.getTransaction().begin();
+        
         entityManager.persist(pedido);
         entityManager.persist(pedidoItem);
         entityManager.getTransaction().commit();
