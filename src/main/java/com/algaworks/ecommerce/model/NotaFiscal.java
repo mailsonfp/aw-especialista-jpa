@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
@@ -28,8 +29,9 @@ public class NotaFiscal {
     @OneToOne(optional = false)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
-
-    private String xml;
+    
+    @Lob
+    private byte[] xml;
     
     @Column(name = "data_emissao")
     private Date dataEmissao;
