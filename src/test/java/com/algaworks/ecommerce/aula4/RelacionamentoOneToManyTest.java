@@ -12,6 +12,7 @@ import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.PedidoItem;
 import com.algaworks.ecommerce.model.Produto;
 import com.algaworks.ecommerce.model.enums.StatusPedido;
+import com.algaworks.ecommerce.model.id.PedidoItemId;
 
 public class RelacionamentoOneToManyTest extends EntityManagerTest {
 	
@@ -47,15 +48,16 @@ public class RelacionamentoOneToManyTest extends EntityManagerTest {
         pedido.setTotal(BigDecimal.TEN);
         pedido.setCliente(cliente);
 
-        PedidoItem pedidoItem = new PedidoItem();
-        pedidoItem.setPrecoProduto(produto.getPreco());
-        pedidoItem.setQuantidade(1);
-        pedidoItem.setPedido(pedido);
-        pedidoItem.setProduto(produto);
+        PedidoItem itemPedido = new PedidoItem();
+        itemPedido.setId(new PedidoItemId());
+        itemPedido.setPrecoProduto(produto.getPreco());
+        itemPedido.setQuantidade(1);
+        itemPedido.setPedido(pedido);
+        itemPedido.setProduto(produto);
 
         entityManager.getTransaction().begin();
         entityManager.persist(pedido);
-        entityManager.persist(pedidoItem);
+        entityManager.persist(itemPedido);
         entityManager.getTransaction().commit();
 
         entityManager.clear();

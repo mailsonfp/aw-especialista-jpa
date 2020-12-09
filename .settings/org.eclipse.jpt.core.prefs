@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 org.eclipse.jpt.core.platform=generic2_2
 org.eclipse.jpt.jpa.core.discoverAnnotatedClasses=true
+problem.ID_MAPPING_MAPPED_BY_RELATIONSHIP_AND_COLUMN_SPECIFIED=ignore
 problem.PERSISTENCE_UNIT_NONEXISTENT_MAPPING_FILE=error
 problem.PROJECT_NO_CONNECTION=ignore
+problem.TYPE_MAPPING_PK_REDEFINED_ID_ATTRIBUTE=ignore
 workspace_validation_preferences_overridden=true
