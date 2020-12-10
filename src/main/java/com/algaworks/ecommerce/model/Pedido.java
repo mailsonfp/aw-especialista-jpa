@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ import lombok.Setter;
 @EntityListeners({ GerarNotaFiscalListener.class, GenericoListener.class })
 public class Pedido extends EntidadeBaseInteger {
     
-    @ManyToOne(optional = false /*optional define se será realizado um inner join ou left outer join*/)
+    @ManyToOne(optional = false /*optional define se será realizado um inner join ou left outer join*/, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
     
@@ -54,7 +55,9 @@ public class Pedido extends EntidadeBaseInteger {
 
     private BigDecimal total;
     
-    @OneToMany(mappedBy = "pedido")
+    //CascadeType.REMOVAL -> quando remove os pedidos, remove o item
+  	//cascade = CascadeType.PERSIST, orphanRemoval = true também excluir os itens quando um pedido é excluido
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<PedidoItem> itens;
     
     @Enumerated(EnumType.STRING)
