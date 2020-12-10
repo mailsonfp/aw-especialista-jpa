@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,10 +37,13 @@ public class Produto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@Column(name = "nome", length = 100, nullable = false)
 	private String nome;
 	
+	@Column(columnDefinition = "varchar(275) not null default 'descricao'")
 	private String descricao;
 	
+	@Column(precision = 19, scale = 2)
 	private BigDecimal preco;
 	
 	@Column(name = "data_criacao", updatable = false)
@@ -49,7 +53,9 @@ public class Produto {
     private LocalDateTime dataUltimaAtualizacao;
 	
 	@ManyToMany
-	@JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+	@JoinTable(name = "produto_categoria",
+				joinColumns = @JoinColumn(name = "produto_id", nullable = false, foreignKey = @ForeignKey(name = "fk_produto_categoria_produto")),
+				inverseJoinColumns = @JoinColumn(name = "categoria_id", nullable = false, foreignKey = @ForeignKey(name = "fk_produto_categoria_catergoria")))
 	private List<Categoria> categorias;
 	
 	@OneToOne(mappedBy = "produto")

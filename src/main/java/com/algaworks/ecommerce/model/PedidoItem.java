@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -28,12 +29,12 @@ public class PedidoItem {
 	
 	@MapsId("pedidoId")
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "pedido_id", insertable = false, updatable = false)
+	@JoinColumn(name = "pedido_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_pedido_item_pedido"), nullable = false)
 	private Pedido pedido;
 	
     @MapsId("produtoId") // entre parenteses é o nome do atribuido que representa o id, no caso, é o nome do atributo na PedidoItemId
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "produto_id", insertable = false, updatable = false)
+	@JoinColumn(name = "produto_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_pedido_item_produto"), nullable = false)
 	private Produto produto;
 	
 	@Column(name = "preco_produto")
