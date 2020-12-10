@@ -10,13 +10,16 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import com.algaworks.ecommerce.model.enums.SexoCliente;
 
@@ -27,9 +30,12 @@ import lombok.Setter;
 @Setter
 @SecondaryTable(name = "cliente_detalhe", pkJoinColumns = @PrimaryKeyJoinColumn(name="cliente_id"))
 @Entity
+@Table(name = "cliente", uniqueConstraints = {@UniqueConstraint(name = "unq_cpf", columnNames = {"cpf"})}, indexes = { @Index(name = "idx_nome", columnList = "nome") })
 public class Cliente extends EntidadeBaseInteger {
 
     private String nome;
+    
+    private String cpf;
     
     @Transient
     private String primeiroNome;
