@@ -15,6 +15,56 @@ import com.algaworks.ecommerce.model.Produto;
 public class SubqueriesTest extends EntityManagerTest {
 	
 	@Test
+	public void pesquisarComAllExercicio() {
+        // Todos os produtos que sempre foram vendidos pelo mesmo preço.
+        String jpql = "select distinct p from PedidoItem ip join ip.produto p where " +
+                " ip.precoProduto = ALL (select precoProduto from PedidoItem where produto = p and id <> ip.id)";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+	
+	@Test
+    public void pesquisarComAny() {
+        // Podemos usar o ANY e o SOME.
+
+        // Todos os produtos que já foram vendidos por um preco diferente do atual
+        String jpql = "select p from Produto p " +
+                " where p.preco <> ANY (select precoProduto from PedidoItem where produto = p)";
+
+        // Todos os produtos que já foram vendidos, pelo menos, uma vez pelo preço atual.
+//        String jpql = "select p from Produto p " +
+//                " where p.preco = ANY (select precoProduto from Pedido where produto = p)";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+	
+	@Test
+    public void pesquisarComAll() {
+        // Todos os produtos não foram vendidos mais depois que encareceram
+         //String jpql = "select p from Produto p where p.preco > ALL (select precoProduto from PedidoItem where produto = p)";
+
+        // Todos os produtos que sempre foram vendidos pelo preco atual. o max/min tem o mesmo efeito
+        String jpql = "select p from Produto p where p.preco = ALL (select precoProduto from PedidoItem where produto = p)";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+	
+	@Test
     public void perquisarComExistsExercicio() {
         String jpql = "select p from Produto p where exists (select 1 from PedidoItem where produto = p and precoProduto <> p.preco)";
 
