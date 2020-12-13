@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,7 +21,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity(name = "nota_fiscal")
+@Entity
+@Table(name = "nota_fiscal")
 public class NotaFiscal {
 
     @EqualsAndHashCode.Include
@@ -34,6 +38,7 @@ public class NotaFiscal {
     @Lob
     private byte[] xml;
     
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_emissao")
     private Date dataEmissao;
     
