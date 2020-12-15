@@ -15,30 +15,50 @@ import org.junit.Test;
 import com.algaworks.ecommerce.EntityManagerTest;
 import com.algaworks.ecommerce.model.Pagamento;
 import com.algaworks.ecommerce.model.Pedido;
+import com.algaworks.ecommerce.model.PedidoItem;
+import com.algaworks.ecommerce.model.Produto;
 import com.algaworks.ecommerce.model.enums.StatusPagamento;
 
 public class JoinCriteriaTest extends EntityManagerTest {
 	
-	 @Test
-	    public void usarJoinFetch() {
-	        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-	        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
-	        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+	@Test
+    public void buscarPedidosComProdutoEspecifico() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+        Join<PedidoItem, Produto> joinItemPedidoProduto = root.join("itens").join("produto");
 
-	        root.fetch("notaFiscal", JoinType.LEFT);
-	        root.fetch("pagamento", JoinType.LEFT);
-	        root.fetch("cliente");
-	        //Join<Pedido, Cliente> joinCliente = (Join<Pedido, Cliente>) root.<Pedido, Cliente>fetch("cliente");
+        criteriaQuery.select(root);
 
-	        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.equal(
+                joinItemPedidoProduto.get("id"), 1));
 
-	        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), 1));
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 
-	        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+    }
+	
+	@Test
+    public void usarJoinFetch() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
 
-	        Pedido pedido = typedQuery.getSingleResult();
-	        Assert.assertNotNull(pedido);
-	    }
+        root.fetch("notaFiscal", JoinType.LEFT);
+        root.fetch("pagamento", JoinType.LEFT);
+        root.fetch("cliente");
+        //Join<Pedido, Cliente> joinCliente = (Join<Pedido, Cliente>) root.<Pedido, Cliente>fetch("cliente");
+
+        criteriaQuery.select(root);
+
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), 1));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        Pedido pedido = typedQuery.getSingleResult();
+        Assert.assertNotNull(pedido);
+    }
 
 	
 	@SuppressWarnings("unused")
