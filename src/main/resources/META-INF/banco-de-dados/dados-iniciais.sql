@@ -26,6 +26,9 @@ insert into pagamento (pedido_id, status, tipo_pagamento, numero_cartao, codigo_
 insert into pedido (id, cliente_id, data_criacao, total, status) values (5, 1, date_sub(sysdate(), interval 2 day), 799.0, 'PAGO');
 insert into pedido_item (pedido_id, produto_id, preco_produto, quantidade) values (5, 1, 799, 1);
 
+insert into pedido (id, cliente_id, data_criacao, total, status) values (6, 2, sysdate(), 799.0, 'AGUARDANDO');
+insert into pedido_item (pedido_id, produto_id, preco_produto, quantidade) values (6, 1, 799, 1);
+insert into pagamento (pedido_id, status, tipo_pagamento, numero_cartao, codigo_barras, data_vencimento) values (6, 'PROCESSANDO', 'BOL', null, '456', date_add(sysdate(), interval 2 day));
 
 insert into categoria (id, nome) values (1, 'Eletrodomésticos');
 insert into categoria (id, nome) values (2, 'Livros');
