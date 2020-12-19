@@ -7,14 +7,56 @@ import javax.persistence.Query;
 import org.junit.Test;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Categoria;
 import com.algaworks.ecommerce.model.PedidoItem;
 import com.algaworks.ecommerce.model.Produto;
+import com.algaworks.ecommerce.model.dto.CategoriaDTO;
 import com.algaworks.ecommerce.model.dto.ProdutoDTO;
 
 @SuppressWarnings("unchecked")
 public class ConsultaNativaTest extends EntityManagerTest {
+
+	@Test
+    public void mapearConsultaParaDTOEmArquivoExternoExercicio() {
+        Query query = entityManager.createNamedQuery("ecm_categoria.listar.dto");
+
+        List<CategoriaDTO> lista = query.getResultList();
+
+        lista.stream().forEach(obj -> System.out.println(
+                String.format("CategoriaDTO => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
+    }
 	
-	//@Test
+	@Test
+    public void usarAquivoXML() {
+        Query query = entityManager.createNamedQuery("ecm_categoria.listar");
+
+        List<Categoria> lista = query.getResultList();
+
+        lista.stream().forEach(obj -> System.out.println(
+                String.format("Categoria => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
+    }
+	
+	@Test
+    public void usarUmaNamedNativeQuery02() {
+        Query query = entityManager.createNamedQuery("ecm_produto.listar");
+
+        List<Produto> lista = query.getResultList();
+
+        lista.stream().forEach(obj -> System.out.println(
+                String.format("Produto => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
+    }
+	
+	@Test
+    public void usarUmaNamedNativeQuery01() {
+        Query query = entityManager.createNamedQuery("produto_loja.listar");
+
+        List<Produto> lista = query.getResultList();
+
+        lista.stream().forEach(obj -> System.out.println(
+                String.format("Produto => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
+    }
+	
+	@Test
     public void usarColumnResultRetornarDTO() {
         String sql = "select * from ecm_produto";
 
@@ -28,6 +70,7 @@ public class ConsultaNativaTest extends EntityManagerTest {
 	
 	/*@Test a tabela ecm_produto não está no banco, mas o exemplo serve para ver como preencher uma entidade fazendo uma SQL em uma tabela diferente
 	 * usando @SqlResultSetMapping e mapeando os campos da tabela utilizada na SQL x os campos da entidade*/
+	@Test
     public void usarFieldResult() {
         String sql = "select * from ecm_produto";
 
@@ -41,7 +84,7 @@ public class ConsultaNativaTest extends EntityManagerTest {
 	
 	@Test
     public void usarSQLResultSetMapping02() {
-        String sql = "select ip.*, p.* from item_pedido ip join produto p on p.id = ip.produto_id";
+        String sql = "select ip.*, p.* from pedido_item ip inner join produto p on p.id = ip.produto_id";
 
         Query query = entityManager.createNativeQuery(sql,
                 "item_pedido-produto.ItemPedido-Produto");
