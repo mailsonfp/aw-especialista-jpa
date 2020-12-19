@@ -8,6 +8,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -30,7 +31,9 @@ import javax.persistence.SqlResultSetMapping;
 import javax.persistence.SqlResultSetMappings;
 
 import com.algaworks.ecommerce.listener.GenericoListener;
+import com.algaworks.ecommerce.model.converter.BooleanToSimNaoConverter;
 import com.algaworks.ecommerce.model.dto.ProdutoDTO;
+import com.sun.istack.NotNull;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -96,6 +99,11 @@ public class Produto {
 
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
+    
+    @Convert(converter = BooleanToSimNaoConverter.class)
+    @NotNull
+    @Column(length = 3)
+    private Boolean ativo = Boolean.FALSE;
 	
 	@ManyToMany
 	@JoinTable(name = "produto_categoria",
