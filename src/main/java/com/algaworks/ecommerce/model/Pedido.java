@@ -20,7 +20,6 @@ import javax.persistence.NamedEntityGraphs;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
@@ -28,13 +27,14 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
-import com.algaworks.ecommerce.listener.GenericoListener;
 import com.algaworks.ecommerce.listener.GerarNotaFiscalListener;
 import com.algaworks.ecommerce.model.enums.StatusPedido;
 
 import lombok.Getter;
 import lombok.Setter;
 
+//@Cacheable(false) - com o cache configurado como DISABLE_SELECTIVE, desabilita o cache para esssa entidade
+//@Cacheable - com o cache configurado como ENABLE_SELECTIVE, habilita o cache para esssa entidade, somente as entidades com o @Cacheable(true) te cache
 @NamedEntityGraphs({
     @NamedEntityGraph(
             name = "Pedido.dadosEssencias",
@@ -61,7 +61,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@EntityListeners({ GerarNotaFiscalListener.class, GenericoListener.class })
+//@EntityListeners({ GerarNotaFiscalListener.class, GenericoListener.class })
+@EntityListeners({ GerarNotaFiscalListener.class })
 public class Pedido extends EntidadeBaseInteger {
     
     @ManyToOne(optional = false /*optional define se será realizado um inner join ou left outer join*/, cascade = CascadeType.PERSIST)
@@ -139,9 +140,9 @@ public class Pedido extends EntidadeBaseInteger {
     public void aposRemover() {
         System.out.println("Após remover Pedido.");
     }
-
-    @PostLoad
+    
+    /*@PostLoad
     public void aoCarregar() {
         System.out.println("Após carregar o Pedido.");
-    }
+    }*/
 }
