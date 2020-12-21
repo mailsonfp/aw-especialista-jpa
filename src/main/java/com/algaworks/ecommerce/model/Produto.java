@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.SqlResultSetMappings;
+import javax.persistence.Version;
 
 import com.algaworks.ecommerce.listener.GenericoListener;
 import com.algaworks.ecommerce.model.converter.BooleanToSimNaoConverter;
@@ -79,6 +80,9 @@ import lombok.Setter;
 @Entity
 @EntityListeners({ GenericoListener.class })
 public class Produto {
+	
+	@Version
+	private Integer versao;
 	
 	@EqualsAndHashCode.Include
 	@Id
