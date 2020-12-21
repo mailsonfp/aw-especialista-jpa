@@ -25,6 +25,12 @@
             <property name="javax.persistence.jdbc.password" value="dev2188mail" />
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
 			
+			<property name="hibernate.multiTenancy" value="SCHEMA" />
+            <property name="hibernate.tenant_identifier_resolver"
+                      value="com.algaworks.ecommerce.hibernate.EcmCurrentTenantIdentifierResolver"/>
+            <property name="hibernate.multi_tenant_connection_provider"
+                      value="com.algaworks.ecommerce.hibernate.EcmSchemaMultiTenantConnectionProvider"/>
+                      
 			<property name="hibernate.hikari.maximumPoolSize" value="4" />
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
 			
